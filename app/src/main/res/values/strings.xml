@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baseui</string>
+    <string name="strcap">촬영</string>
+    <string name="strexit">종료</string>
+    <string name="strinform">정보</string>
+    <string name="strdb">정보</string>
+</resources>
