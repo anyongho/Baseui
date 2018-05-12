@@ -25,27 +25,26 @@ public class MainActivity extends Activity {
         capture_btn = (Button) findViewById(R.id.recapture);
         exit_btn = (Button) findViewById(R.id.exit);
         db_btn = (Button) findViewById(R.id.db_btn);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //촬영버튼
         capture_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Capture_Activity.class);
                 startActivity(intent);
             }
         });
-
-        exit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        //DB버튼
         db_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), NewActivity.class);
                 startActivity(intent);
             }
         });
-
+        //종료버튼
+        exit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }

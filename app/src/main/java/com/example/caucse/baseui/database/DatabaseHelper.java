@@ -4,31 +4,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.example.caucse.baseui.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DBNAME = "Beerinfo";
+    public static final String DBNAME = "Beerinfo2";
     public static final String DBLOCATION = "/data/data/com.example.caucse.baseui/databases/";
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
+
+
     public DatabaseHelper(Context context) {
+
         super(context, DBNAME, null, 1);
         this.mContext = context;
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+     //필요없음
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+     //필요없음
     }
+
     public void openDatabase(){
         String dbPath = mContext.getDatabasePath(DBNAME).getPath();
         if(mDatabase != null && mDatabase.isOpen()) {
