@@ -10,11 +10,9 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,24 +20,17 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class Capture_Activity extends AppCompatActivity {
+public class Album_Activity extends AppCompatActivity{
+    private static final int PICK_FROM_CAMERA = 0;
+    private Uri mImageCaptureUri;
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private String imageFilePath;
-    private Uri photoUri;
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        doTakeAlbumAction();
 
-        grantUriPermission();
-        sendTakePhotoIntent();// camera intent 호출
-        ////// 이 사이에서 맥주를 판별해내는 알고리즘이 들어가야 할 것이다.
 
+        /// 맥주판별 알고리즘 들어가는 곳
         TextView beerName = (TextView) findViewById(R.id.name);
         TextView beerCountry = (TextView) findViewById(R.id.country);
         TextView beerFlavor = (TextView) findViewById(R.id.flavor);
@@ -77,15 +68,27 @@ public class Capture_Activity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK) {
+            setContentView(R.layout.activity_album);
+            mImageCaptureUri = data.getData();
+            String[] projection = { MediaStore.Images.Media.DATA};
+
             grantUriPermission();
-            setContentView(R.layout.activity_capture);
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+            Cursor mCursor = getContentResolver().query(mImageCaptureUri, projection, null, null, null);
+            mCursor.moveToFirst();
+            int column_index = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+            String path = mCursor.getString(column_index);
+            if(mCursor!=null){
+                mCursor.close();
+                mCursor = null;
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
             ExifInterface exif = null;
 
             try {
-                exif = new ExifInterface(imageFilePath);
+                exif = new ExifInterface(path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -99,10 +102,9 @@ public class Capture_Activity extends AppCompatActivity {
             } else {
                 exifDegree = 0;
             }
-
             ((ImageView)findViewById(R.id.img)).setImageBitmap(rotate(bitmap, exifDegree));
-        }else {
-        finish();
+        }else{
+            finish();
         }
     }
 
@@ -117,7 +119,6 @@ public class Capture_Activity extends AppCompatActivity {
         }
         return 0;
     }
-
     //비트맵을 각도대로 회전시켜 결과를 반환해주는 메소드이다.
     private Bitmap rotate(Bitmap bitmap, float degree) {
         Matrix matrix = new Matrix();
@@ -125,67 +126,44 @@ public class Capture_Activity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    //카메라 intent 함수
-    private void sendTakePhotoIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-
-            if (photoFile != null) {
-                photoUri = FileProvider.getUriForFile(this, getPackageName(), photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
+    public void doTakeAlbumAction(){
+        
+        grantUriPermission();
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
+        
+        
     }
 
-
-    //이미지가 저장될 파일 만들어내기
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "Beer_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,      /* prefix */
-                ".jpg",         /* suffix */
-                storageDir          /* directory */
-        );
-        imageFilePath = image.getAbsolutePath();
-        return image;
-    }
     private void grantUriPermission() {
         //갤러리, 카메라 사용 권한 체크
 
-        if(ContextCompat.checkSelfPermission(Capture_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+        if(ContextCompat.checkSelfPermission(Album_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED){
             //최초 권한 요청인지 혹은 사용자에게 의한 재요청인지 확인
-            if(ActivityCompat.shouldShowRequestPermissionRationale(Capture_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Album_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 //사용자가 임의로 권한을 취소하면 권한 재요청
-                ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             } else {
-                ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
-        } else if(ContextCompat.checkSelfPermission(Capture_Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+        } else if(ContextCompat.checkSelfPermission(Album_Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED){
             //최초 권한인지 혹은 사용자에게 의한 재요청인지 확인
-            if(ActivityCompat.shouldShowRequestPermissionRationale(Capture_Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Album_Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                 // 사용자가 임의로 권한을 취소하면 권한재요청
-                ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }else {
-                ActivityCompat.requestPermissions(Capture_Activity.this,  new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1 );
+            ActivityCompat.requestPermissions(Album_Activity.this,  new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1 );
             }
-        }else if(ContextCompat.checkSelfPermission(Capture_Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        }else if(ContextCompat.checkSelfPermission(Album_Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
             // 최초 권한 요청인지 혹은 사용자에게 의한 재요청인지 확인
-            if(ActivityCompat.shouldShowRequestPermissionRationale(Capture_Activity.this, Manifest.permission.CAMERA)){
-                // 사용자가 임의로 권한을 취소 시킨 경우, 권한 재요청
-                ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Album_Activity.this, Manifest.permission.CAMERA)){
+            // 사용자가 임의로 권한을 취소 시킨 경우, 권한 재요청
+                ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             }else {
-                ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+                ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             }
     }
 }

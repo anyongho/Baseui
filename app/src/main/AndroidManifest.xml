@@ -24,6 +24,7 @@
 
         <activity android:name=".NewActivity" android:label="Second 액티비티"/>
         <activity android:name=".Capture_Activity" android:label="Third 액티비티"/>
+        <activity android:name=".Album_Activity" android:label="4th 액티비티"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
