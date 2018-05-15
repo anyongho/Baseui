@@ -2,6 +2,7 @@ package com.example.caucse.baseui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -35,11 +36,11 @@ public class Capture_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_capture);
         grantUriPermission();
         sendTakePhotoIntent();// camera intent 호출
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ////// 이 사이에서 맥주를 판별해내는 알고리즘이 들어가야 할 것이다.
-
         TextView beerName = (TextView) findViewById(R.id.name);
         TextView beerCountry = (TextView) findViewById(R.id.country);
         TextView beerFlavor = (TextView) findViewById(R.id.flavor);
@@ -49,7 +50,7 @@ public class Capture_Activity extends AppCompatActivity {
         TextView beerKcal = (TextView) findViewById(R.id.kcal);
         DBHandler dbHandler = DBHandler.open(this);
         try {
-            int ID = 3; // 3번째인 cass로 가정한다.
+            int ID = 2; // 3번째인 cass로 가정한다.
             Cursor cursor = dbHandler.select(ID);
             if (cursor.getCount() == 0) {
                 Toast.makeText(this, "데이터가 없습니다.",
@@ -80,7 +81,6 @@ public class Capture_Activity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             grantUriPermission();
-            setContentView(R.layout.activity_capture);
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
             ExifInterface exif = null;
 

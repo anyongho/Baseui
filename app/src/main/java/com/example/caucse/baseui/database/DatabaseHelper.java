@@ -16,8 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-
-
     public DatabaseHelper(Context context) {
 
         super(context, DBNAME, null, 1);
@@ -47,7 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             mDatabase.close();
         }
     }
-
 
     public List<Product> getListProduct(){
         Product product = null;

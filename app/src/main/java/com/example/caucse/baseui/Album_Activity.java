@@ -2,6 +2,7 @@ package com.example.caucse.baseui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,8 +28,9 @@ public class Album_Activity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_album);
         doTakeAlbumAction();
-
 
         /// 맥주판별 알고리즘 들어가는 곳
         TextView beerName = (TextView) findViewById(R.id.name);
@@ -40,7 +42,7 @@ public class Album_Activity extends AppCompatActivity{
         TextView beerKcal = (TextView) findViewById(R.id.kcal);
         DBHandler dbHandler = DBHandler.open(this);
         try {
-            int ID = 3; // 3번째인 cass로 가정한다.
+            int ID = 4; // 4번째인 cass로 가정한다.
             Cursor cursor = dbHandler.select(ID);
             if (cursor.getCount() == 0) {
                 Toast.makeText(this, "데이터가 없습니다.",
@@ -70,7 +72,6 @@ public class Album_Activity extends AppCompatActivity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK) {
-            setContentView(R.layout.activity_album);
             mImageCaptureUri = data.getData();
             String[] projection = { MediaStore.Images.Media.DATA};
 
