@@ -17,6 +17,17 @@
         android:layout_marginBottom="25dp"
         android:gravity="top" />
 
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="269dp"
+        android:layout_height="120dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="3dp"
+        android:text="Source"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

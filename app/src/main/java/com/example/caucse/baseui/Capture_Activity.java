@@ -21,26 +21,46 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Capture_Activity extends AppCompatActivity {
 
+public class Capture_Activity extends AppCompatActivity {
+   ///tensorflow작업에 필요한 변수들
+   private static final int INPUT_SIZE = 299; //이미지 사이즈
+    private static final int IMAGE_MEAN = 0;
+    private static final float IMAGE_STD = 255.0f;
+    private static final String INPUT_NAME = "Mul";
+    private static final String OUTPUT_NAME = "final_result";
+    ///tensorflow 파일 위치
+    private static final String MODEL_FILE = "file:///android_asset/rounded_graph.pb";
+    private static final String LABEL_FILE = "file:///android_asset/output_labels.txt";
+
+   ///사진 촬영에 필요한 변수들
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private String imageFilePath;
     private Uri photoUri;
-
-
+    private Classifier classifier;
+    private Executor executor = Executors.newSingleThreadExecutor(); //쓰레드 동작
+    private TextView txtResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
+        txtResult = (TextView)findViewById(R.id.txtResult);
         grantUriPermission();
         sendTakePhotoIntent();// camera intent 호출
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ////// 이 사이에서 맥주를 판별해내는 알고리즘이 들어가야 할 것이다.
+        //텐서플로우 초기화 및 그래프파일 메모리에 탑재
+        initTensorFlowAndLoadModel();
+
+        ////// 데이터베이스 정보가져오기
         TextView beerName = (TextView) findViewById(R.id.name);
         TextView beerCountry = (TextView) findViewById(R.id.country);
         TextView beerFlavor = (TextView) findViewById(R.id.flavor);
@@ -80,8 +100,13 @@ public class Capture_Activity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            grantUriPermission();
+
+            // 이미지는 안드로이드용 텐서플로우가 인식할 수 있는 포맷인 비트맵으로 변환해서 텐서플로우에 넘깁니다
+
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
+            recognize_bitmap(bitmap);
+            //            //권한 확인
+            grantUriPermission();
             ExifInterface exif = null;
 
             try {
@@ -187,5 +212,39 @@ public class Capture_Activity extends AppCompatActivity {
             }else {
                 ActivityCompat.requestPermissions(Capture_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             }
+    }
+    //텐서플로우 초기화 및 그래프파일 메모리에 탑재
+    private void initTensorFlowAndLoadModel() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    classifier = TensorFlowImageClassifier.create(
+                            getAssets(),
+                            MODEL_FILE,
+                            LABEL_FILE,
+                            INPUT_SIZE,
+                            IMAGE_MEAN,
+                            IMAGE_STD,
+                            INPUT_NAME,
+                            OUTPUT_NAME);
+                } catch (final Exception e) {
+                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                }
+            }
+        });
+    }
+
+    //비트맵 인식 및 결과표시
+    private void recognize_bitmap(Bitmap bitmap) {
+
+        // 비트맵을 처음에 정의된 INPUT SIZE에 맞춰 스케일링 (상의 왜곡이 일어날수 있는데, 이건 나중에 따로 설명할게요)
+        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+        // classifier 의 recognizeImage 부분이 실제 inference 를 호출해서 인식작업을 하는 부분.
+        final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
+        // 결과값은 Classifier.Recognition 구조로 리턴되는데, 원래는 여기서 결과값을 배열로 추출가능하지만,
+
+        // 여기서는 간단하게 그냥 통째로 txtResult에 뿌려줍니다.
+       txtResult.setText(results.toString());
     }
 }
