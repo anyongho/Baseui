@@ -19,6 +19,7 @@ public class DBHandler {
     public static DBHandler open(Context context) throws SQLException{
         DBHandler handler = new DBHandler(context);
         return handler;
+
     }
 
     public void close() {helper.close(); }
@@ -32,6 +33,7 @@ public class DBHandler {
             cursor.moveToFirst();
         }
         return cursor;
+
     }
 
 }
