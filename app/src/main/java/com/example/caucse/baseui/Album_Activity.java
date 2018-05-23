@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -52,24 +52,23 @@ public class Album_Activity extends AppCompatActivity{
     private Uri mImageCaptureUri;
     //파싱 문자배열
     String str1[] = new String[10];
+    //tensorflow 결과값 total_num
+    private int total_num;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_album);
-        txtResult = (TextView)findViewById(R.id.txtResult);
-        beerName = (TextView) findViewById(R.id.name);
-        beerCountry = (TextView) findViewById(R.id.country);
-        beerFlavor = (TextView) findViewById(R.id.flavor);
-        beerKind = (TextView) findViewById(R.id.kind);
-        beerIBU = (TextView) findViewById(R.id.ibu);
-        beerAlcohol = (TextView) findViewById(R.id.alcohol);
-        beerKcal = (TextView) findViewById(R.id.kcal);
-        doTakeAlbumAction();
-        //텐서플로우 초기화 및 그래프파일 메모리에 탑재
+        grantUriPermission();
         initTensorFlowAndLoadModel();
         /// 맥주판별 알고리즘 들어가는 곳
-        database();
+        //텐서플로우 초기화를 위한 handler for delay
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run(){
+                // camera intent 호출
+                doTakeAlbumAction();
+            }
+        }, 2000); //2초뒤에 호출
     }
 
     @Override
@@ -77,7 +76,7 @@ public class Album_Activity extends AppCompatActivity{
         if (requestCode == PICK_FROM_Album && resultCode == RESULT_OK) {
             mImageCaptureUri = data.getData();
             String[] projection = { MediaStore.Images.Media.DATA};
-            grantUriPermission();
+
             Cursor mCursor = getContentResolver().query(mImageCaptureUri, projection, null, null, null);
             mCursor.moveToFirst();
             int column_index = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -106,8 +105,20 @@ public class Album_Activity extends AppCompatActivity{
             } else {
                 exifDegree = 0;
             }
-            ((ImageView)findViewById(R.id.img)).setImageBitmap(rotate(bitmap, exifDegree));
+            //setcontentview
+            setContentView(R.layout.activity_album);;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            txtResult = (TextView)findViewById(R.id.txtResult);
+            beerName = (TextView) findViewById(R.id.name);
+            beerCountry = (TextView) findViewById(R.id.country);
+            beerFlavor = (TextView) findViewById(R.id.flavor);
+            beerKind = (TextView) findViewById(R.id.kind);
+            beerIBU = (TextView) findViewById(R.id.ibu);
+            beerAlcohol = (TextView) findViewById(R.id.alcohol);
+            beerKcal = (TextView) findViewById(R.id.kcal);
             recognize_bitmap(bitmap);
+            ((ImageView)findViewById(R.id.img)).setImageBitmap(rotate(bitmap, exifDegree));
+            database();
         }else{
             finish();
         }
@@ -131,19 +142,17 @@ public class Album_Activity extends AppCompatActivity{
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
+    //앨범 액션
     public void doTakeAlbumAction(){
-        
         grantUriPermission();
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_Album);
-
     }
 
+    //갤러리, 카메라 사용 권한 체크
     private void grantUriPermission() {
-        //갤러리, 카메라 사용 권한 체크
-
-        if(ContextCompat.checkSelfPermission(Album_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+            if(ContextCompat.checkSelfPermission(Album_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED){
             //최초 권한 요청인지 혹은 사용자에게 의한 재요청인지 확인
             if(ActivityCompat.shouldShowRequestPermissionRationale(Album_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -170,6 +179,7 @@ public class Album_Activity extends AppCompatActivity{
                 ActivityCompat.requestPermissions(Album_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             }
     }
+
     //텐서플로우 초기화 및 그래프파일 메모리에 탑재
     private void initTensorFlowAndLoadModel() {
         executor.execute(new Runnable() {
@@ -191,62 +201,65 @@ public class Album_Activity extends AppCompatActivity{
             }
         });
     }
-    private void database(){
-        int ID = 0;
-        while(str1[0] != null) {
 
-            DBHandler dbHandler = DBHandler.open(this);
+    // database sql
+    private void database(){
+        int ID = 3;
+        DBHandler dbHandler = DBHandler.open(this);
             try {
-                if (str1[0] == "kgb") {
+                if (str1[0].equals("kgb")) {
                     ID = 11;
-                } else if (str1[0] == "heineken") {
+                } else if (str1[0].equals("heineken")) {
                     ID = 7;
-                } else if (str1[0] == "paulaner") {
+                } else if (str1[0].equals("paulaner")) {
                     ID = 24;
-                } else if (str1[0] == "tsingtao") {
+                } else if (str1[0].equals("tsingtao")) {
                     ID = 1;
-                } else if (str1[0] == "kronenbourg") {
+                } else if (str1[0].equals("kronenbourg")) {
                     ID = 21;
-                } else if (str1[0] == "tiger") {
+                } else if (str1[0].equals("tiger")) {
                     ID = 23;
-                } else if (str1[0] == "san") {
+                } else if (str1[0].equals("san")) {
                     ID = 16; // 3번째인 cass로 가정한다.
-                } else if (str1[0] == "pilsner") {
+                } else if (str1[0].equals("pilsner")) {
                     ID = 25;
-                } else if (str1[0] == "desperados") {
+                } else if (str1[0].equals("desperados")) {
                     ID = 13;
-                } else if (str1[0] == "krombacher") {
+                } else if (str1[0].equals("krombacher")) {
                     ID = 22;
-                } else if (str1[0] == "suntory") {
+                } else if (str1[0].equals("suntory")) {
                     ID = 17;
-                } else if (str1[0] == "kirin") {
+                } else if (str1[0].equals("kirin")) {
                     ID = 12;
-                } else if (str1[0] == "filite") {
+                } else if (str1[0].equals("filite")) {
                     ID = 9;
-                } else if (str1[0] == "stella") {
+                } else if (str1[0].equals("stella")) {
                     ID = 18;
-                } else if (str1[0] == "carlsberg") {
+                } else if (str1[0].equals("carlsberg")) {
                     ID = 10;
-                } else if (str1[0] == "cass") {
+                } else if (str1[0].equals("cass")) {
                     ID = 3;
-                } else if (str1[0] == "guinness") {
+                } else if (str1[0].equals("guinness")) {
                     ID = 6;
-                } else if (str1[0] == "hoegaarden") {
+                } else if (str1[0].equals("hoegaarden")) {
                     ID = 4;
-                } else if (str1[0] == "asahi") {
+                } else if (str1[0].equals("asahi")) {
                     ID = 5;
-                } else if (str1[0] == "sapporo") {
+                } else if (str1[0].equals("sapporo")) {
                     ID = 8;
-                } else if (str1[0] == "kozel dark") {
+                } else if (str1[0].equals("kozel dark")) {
                     ID = 20;
-                } else if (str1[0] == "max") {
+                } else if (str1[0].equals("max")) {
                     ID = 14;
-                } else if (str1[0] == "yebisu") {
+                } else if (str1[0].equals("yebisu")) {
                     ID = 19;
-                } else if (str1[0] == "budweiser") {
+                } else if (str1[0].equals("budweiser")) {
                     ID = 15;
-                } else if (str1[0] == "hite") {
+                } else if (str1[0].equals("hite")) {
                     ID = 2;
+                } else{
+                    Toast.makeText(this, "정보를 추출해내지 못했습니다.",
+                            Toast.LENGTH_SHORT).show();
                 }
                 Cursor cursor = dbHandler.select(ID);
                 if (cursor.getCount() == 0) {
@@ -272,11 +285,11 @@ public class Album_Activity extends AppCompatActivity{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
     }
+
     //비트맵 인식 및 결과표시
     private void recognize_bitmap(Bitmap bitmap) {
-        int i = 0;
+        total_num = 0;
         // 비트맵을 처음에 정의된 INPUT SIZE에 맞춰 스케일링 (상의 왜곡이 일어날수 있는데, 이건 나중에 따로 설명할게요)
         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
         // classifier 의 recognizeImage 부분이 실제 inference 를 호출해서 인식작업을 하는 부분.
@@ -287,8 +300,10 @@ public class Album_Activity extends AppCompatActivity{
 
         StringTokenizer st1 = new StringTokenizer(result, "[](),%1234567890. ");
         while (st1.hasMoreTokens()) {
-            str1[i] = st1.nextToken();
+            str1[total_num] = st1.nextToken();
+            total_num++;
         }
         txtResult.setText(results.toString());
     }
+
 }

@@ -12,6 +12,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -59,37 +60,31 @@ public class Capture_Activity extends AppCompatActivity {
     private TextView beerIBU;
     private TextView beerAlcohol;
     private TextView beerKcal;
+    //tensorflow 결과값 total_num
+    private int total_num;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capture);
-        txtResult = (TextView)findViewById(R.id.txtResult);
-        beerName = (TextView) findViewById(R.id.name);
-        beerCountry = (TextView) findViewById(R.id.country);
-        beerFlavor = (TextView) findViewById(R.id.flavor);
-        beerKind = (TextView) findViewById(R.id.kind);
-        beerIBU = (TextView) findViewById(R.id.ibu);
-        beerAlcohol = (TextView) findViewById(R.id.alcohol);
-        beerKcal = (TextView) findViewById(R.id.kcal);
         grantUriPermission();//카메라 앨범 권한확인
-        sendTakePhotoIntent();// camera intent 호출
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //텐서플로우 초기화 및 그래프파일 메모리에 탑재
         initTensorFlowAndLoadModel();
-
+        //텐서플로우 초기화를 위한 handler for delay
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run(){
+                // camera intent 호출
+                sendTakePhotoIntent();
+            }
+          }, 2000); //2초뒤에 호출
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
-            // 이미지는 안드로이드용 텐서플로우가 인식할 수 있는 포맷인 비트맵으로 변환해서 텐서플로우에 넘깁니다
-
             Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
-            recognize_bitmap(bitmap);
             //bitmap 전환
             ExifInterface exif = null;
-
             try {
                 exif = new ExifInterface(imageFilePath);
             } catch (IOException e) {
@@ -105,8 +100,20 @@ public class Capture_Activity extends AppCompatActivity {
             } else {
                 exifDegree = 0;
             }
-
+            setContentView(R.layout.activity_capture);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            txtResult = (TextView)findViewById(R.id.txtResult);
+            beerName = (TextView) findViewById(R.id.name);
+            beerCountry = (TextView) findViewById(R.id.country);
+            beerFlavor = (TextView) findViewById(R.id.flavor);
+            beerKind = (TextView) findViewById(R.id.kind);
+            beerIBU = (TextView) findViewById(R.id.ibu);
+            beerAlcohol = (TextView) findViewById(R.id.alcohol);
+            beerKcal = (TextView) findViewById(R.id.kcal);
+            // 이미지는 안드로이드용 텐서플로우가 인식할 수 있는 포맷인 비트맵으로 변환해서 텐서플로우에 넘깁니다
+            recognize_bitmap(bitmap);
             ((ImageView)findViewById(R.id.img)).setImageBitmap(rotate(bitmap, exifDegree));
+            database();
         }else {
         finish();
         }
@@ -149,7 +156,90 @@ public class Capture_Activity extends AppCompatActivity {
             }
         }
     }
-
+    //database sql 함수
+    private void database(){
+        int ID = 3;
+        DBHandler dbHandler = DBHandler.open(this);
+        try {
+            if (str1[0].equals("kgb")) {
+                ID = 11;
+            } else if (str1[0].equals("heineken")) {
+                ID = 7;
+            } else if (str1[0].equals("paulaner")) {
+                ID = 24;
+            } else if (str1[0].equals("tsingtao")) {
+                ID = 1;
+            } else if (str1[0].equals("kronenbourg")) {
+                ID = 21;
+            } else if (str1[0].equals("tiger")) {
+                ID = 23;
+            } else if (str1[0].equals("san")) {
+                ID = 16;
+            } else if (str1[0].equals("pilsner")) {
+                ID = 25;
+            } else if (str1[0].equals("desperados")) {
+                ID = 13;
+            } else if (str1[0].equals("krombacher")) {
+                ID = 22;
+            } else if (str1[0].equals("suntory")) {
+                ID = 17;
+            } else if (str1[0].equals("kirin")) {
+                ID = 12;
+            } else if (str1[0].equals("filite")) {
+                ID = 9;
+            } else if (str1[0].equals("stella")) {
+                ID = 18;
+            } else if (str1[0].equals("carlsberg")) {
+                ID = 10;
+            } else if (str1[0].equals("cass")) {
+                ID = 3;
+            } else if (str1[0].equals("guinness")) {
+                ID = 6;
+            } else if (str1[0].equals("hoegaarden")) {
+                ID = 4;
+            } else if (str1[0].equals("asahi")) {
+                ID = 5;
+            } else if (str1[0].equals("sapporo")) {
+                ID = 8;
+            } else if (str1[0].equals("kozel dark")) {
+                ID = 20;
+            } else if (str1[0].equals("max")) {
+                ID = 14;
+            } else if (str1[0].equals("yebisu")) {
+                ID = 19;
+            } else if (str1[0].equals("budweiser")) {
+                ID = 15;
+            } else if (str1[0].equals("hite")) {
+                ID = 2;
+            } else{
+                Toast.makeText(this, "정보를 추출해내지 못했습니다.",
+                        Toast.LENGTH_SHORT).show();
+            }
+            Cursor cursor = dbHandler.select(ID);
+            if (cursor.getCount() == 0) {
+                Toast.makeText(this, "데이터가 없습니다.",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                String Name = cursor.getString(cursor.getColumnIndex("Name"));
+                String Country = cursor.getString(cursor.getColumnIndex("Country"));
+                String Flavor = cursor.getString(cursor.getColumnIndex("Flavor"));
+                String Kind = cursor.getString(cursor.getColumnIndex("Kind"));
+                Float IBU = cursor.getFloat(cursor.getColumnIndex("IBU"));
+                Float Alcohol = cursor.getFloat(cursor.getColumnIndex("Alcohol"));
+                int kcal = cursor.getInt(cursor.getColumnIndex("kcal"));
+                beerName.setText(Name);
+                beerCountry.setText(Country);
+                beerFlavor.setText(Flavor);
+                beerKind.setText(Kind);
+                beerIBU.setText(String.valueOf(IBU));
+                beerAlcohol.setText(String.valueOf(Alcohol));
+                beerKcal.setText(String.valueOf(kcal));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     //이미지가 저장될 파일 만들어내기
     private File createImageFile() throws IOException {
@@ -164,9 +254,9 @@ public class Capture_Activity extends AppCompatActivity {
         imageFilePath = image.getAbsolutePath();
         return image;
     }
-    private void grantUriPermission() {
-        //갤러리, 카메라 사용 권한 체크
 
+    //갤러리, 카메라 사용 권한 체크
+    private void grantUriPermission() {
         if(ContextCompat.checkSelfPermission(Capture_Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED){
             //최초 권한 요청인지 혹은 사용자에게 의한 재요청인지 확인
@@ -218,8 +308,7 @@ public class Capture_Activity extends AppCompatActivity {
 
     //비트맵 인식 및 결과표시
     private void recognize_bitmap(Bitmap bitmap) {
-        int i = 0;
-        int ID = 0;
+        total_num=0;
         // 비트맵을 처음에 정의된 INPUT SIZE에 맞춰 스케일링 (상의 왜곡이 일어날수 있는데, 이건 나중에 따로 설명할게요)
         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
         // classifier 의 recognizeImage 부분이 실제 inference 를 호출해서 인식작업을 하는 부분.
@@ -227,92 +316,14 @@ public class Capture_Activity extends AppCompatActivity {
         // 결과값은 Classifier.Recognition 구조로 리턴되는데, 원래는 여기서 결과값을 배열로 추출가능하지만,
         String result = results.toString() ;
 
+        // 결과값을 원하는대로 파싱하기
         StringTokenizer st1 = new StringTokenizer(result, "[](),%1234567890. ");
         while(st1.hasMoreTokens()) {
-          str1[i] = st1.nextToken();
+          str1[total_num] = st1.nextToken();
+          total_num++;
         }
-
+        // 여기서는 간단하게 classifier 정보를 통째로 txtResult에 뿌려줍니다.
         txtResult.setText(results.toString());
-        // 여기서는 간단하게 그냥 통째로 txtResult에 뿌려줍니다.
-        if(str1[0] != null) {
-            ////// 데이터베이스 정보가져오기
-            DBHandler dbHandler = DBHandler.open(this);
-            try {
-                if (str1[0] == "kgb"){
-                    ID = 11;
-                }else if (str1[0] == "heineken"){
-                    ID = 7;
-                }else if (str1[0] == "paulaner"){
-                    ID = 24;
-                }else if (str1[0] == "tsingtao"){
-                    ID = 1;
-                }else if (str1[0] == "kronenbourg"){
-                    ID = 21;
-                }else if (str1[0] == "tiger"){
-                    ID = 23;
-                }else if (str1[0] == "san") {
-                    ID = 16; // 3번째인 cass로 가정한다.
-                }else if (str1[0] == "pilsner"){
-                    ID = 25;
-                }else if (str1[0] == "desperados"){
-                    ID = 13;
-                }else if (str1[0] == "krombacher"){
-                    ID = 22;
-                }else if (str1[0] == "suntory"){
-                    ID = 17;
-                }else if (str1[0] == "kirin"){
-                    ID = 12;
-                }else if (str1[0] == "filite"){
-                    ID = 9;
-                }else if (str1[0] == "stella"){
-                    ID = 18;
-                }else if (str1[0] == "carlsberg"){
-                    ID = 10;
-                }else if (str1[0] == "cass"){
-                    ID = 3;
-                }else if (str1[0] == "guinness"){
-                    ID = 6;
-                }else if (str1[0] == "hoegaarden"){
-                    ID = 4;
-                }else if (str1[0] == "asahi"){
-                    ID = 5;
-                }else if (str1[0] == "sapporo"){
-                    ID = 8;
-                }else if (str1[0] == "kozel dark"){
-                    ID = 20;
-                }else if (str1[0] == "max"){
-                    ID = 14;
-                }else if (str1[0] == "yebisu"){
-                    ID = 19;
-                }else if (str1[0] == "budweiser"){
-                    ID = 15;
-                }else if (str1[0] == "hite"){
-                    ID = 2;
-                }
-                Cursor cursor = dbHandler.select(ID);
-                if (cursor.getCount() == 0) {
-                    Toast.makeText(this, "데이터가 없습니다.",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    String Name = cursor.getString(cursor.getColumnIndex("Name"));
-                    String Country = cursor.getString(cursor.getColumnIndex("Country"));
-                    String Flavor = cursor.getString(cursor.getColumnIndex("Flavor"));
-                    String Kind = cursor.getString(cursor.getColumnIndex("Kind"));
-                    Float IBU = cursor.getFloat(cursor.getColumnIndex("IBU"));
-                    Float Alcohol = cursor.getFloat(cursor.getColumnIndex("Alcohol"));
-                    int kcal = cursor.getInt(cursor.getColumnIndex("kcal"));
-                    beerName.setText(Name);
-                    beerCountry.setText(Country);
-                    beerFlavor.setText(Flavor);
-                    beerKind.setText(Kind);
-                    beerIBU.setText(String.valueOf(IBU));
-                    beerAlcohol.setText(String.valueOf(Alcohol));
-                    beerKcal.setText(String.valueOf(kcal));
-                }
-                cursor.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 }
