@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/txtResult"
         android:layout_width="252dp"
-        android:layout_height="120dp"
+        android:layout_height="63dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="3dp"
@@ -45,12 +45,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="Tsingtao"
             android:textSize="13dp" />
     </LinearLayout>
     <LinearLayout
@@ -69,12 +68,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/country"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="China"
             android:textSize="13dp" />
     </LinearLayout>
 
@@ -94,12 +92,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/flavor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/flavor"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="특유의 청아한 맛과 깔끔한 뒷맛"
             android:textSize="13dp" />
     </LinearLayout>
 
@@ -119,12 +116,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/kind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/kind"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="Lager"
             android:textSize="13dp" />
     </LinearLayout>
 
@@ -144,12 +140,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/ibu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ibu"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="0"
             android:textSize="13dp" />
     </LinearLayout>
 
@@ -169,12 +164,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/alcohol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/alcohol"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="4.8"
             android:textSize="13dp" />
     </LinearLayout>
 
@@ -195,12 +189,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/kcal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/kcal"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:text="144"
             android:textSize="13dp" />
     </LinearLayout>
 

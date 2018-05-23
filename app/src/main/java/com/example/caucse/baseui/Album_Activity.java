@@ -1,6 +1,8 @@
 package com.example.caucse.baseui;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -54,6 +56,9 @@ public class Album_Activity extends AppCompatActivity{
     String str1[] = new String[10];
     //tensorflow 결과값 total_num
     private int total_num;
+    //progress bar
+    private static final int PROGRESS_DIALOG = 100;
+    ProgressDialog progressDialog;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +66,16 @@ public class Album_Activity extends AppCompatActivity{
         initTensorFlowAndLoadModel();
         /// 맥주판별 알고리즘 들어가는 곳
         //텐서플로우 초기화를 위한 handler for delay
+        showDialog(PROGRESS_DIALOG);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run(){
                 // camera intent 호출
+                dismissDialog(PROGRESS_DIALOG);
                 doTakeAlbumAction();
             }
-        }, 2000); //2초뒤에 호출
+        }, 3000); //3초뒤에 호출
     }
 
     @Override
@@ -106,7 +113,7 @@ public class Album_Activity extends AppCompatActivity{
                 exifDegree = 0;
             }
             //setcontentview
-            setContentView(R.layout.activity_album);;
+            setContentView(R.layout.activity_album);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             txtResult = (TextView)findViewById(R.id.txtResult);
             beerName = (TextView) findViewById(R.id.name);
@@ -305,5 +312,16 @@ public class Album_Activity extends AppCompatActivity{
         }
         txtResult.setText(results.toString());
     }
-
+    @Override
+    protected Dialog onCreateDialog(int id){
+        switch(id)
+        {
+            case PROGRESS_DIALOG:
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); //프로그레스 스타트
+                progressDialog.setMessage("로딩중입니다...");
+                break;
+        }
+        return progressDialog;
+    }
 }

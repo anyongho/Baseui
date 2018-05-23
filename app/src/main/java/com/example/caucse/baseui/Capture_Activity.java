@@ -1,6 +1,8 @@
 package com.example.caucse.baseui;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -62,6 +64,10 @@ public class Capture_Activity extends AppCompatActivity {
     private TextView beerKcal;
     //tensorflow 결과값 total_num
     private int total_num;
+    //progress bar
+    private static final int PROGRESS_DIALOG = 100;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +75,16 @@ public class Capture_Activity extends AppCompatActivity {
         //텐서플로우 초기화 및 그래프파일 메모리에 탑재
         initTensorFlowAndLoadModel();
         //텐서플로우 초기화를 위한 handler for delay
+        showDialog(PROGRESS_DIALOG);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run(){
                 // camera intent 호출
+                dismissDialog(PROGRESS_DIALOG);
                 sendTakePhotoIntent();
             }
-          }, 2000); //2초뒤에 호출
+          }, 3000); //3초뒤에 호출
     }
 
     @Override
@@ -325,5 +333,17 @@ public class Capture_Activity extends AppCompatActivity {
         // 여기서는 간단하게 classifier 정보를 통째로 txtResult에 뿌려줍니다.
         txtResult.setText(results.toString());
 
+    }
+    @Override
+    protected Dialog onCreateDialog(int id){
+        switch(id)
+        {
+            case PROGRESS_DIALOG:
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); //프로그레스 스타트
+                progressDialog.setMessage("로딩중입니다...");
+                break;
+        }
+        return progressDialog;
     }
 }
