@@ -1,8 +1,10 @@
 package com.example.caucse.baseui;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -18,6 +20,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +120,23 @@ public class Album_Activity extends AppCompatActivity{
             //setcontentview
             setContentView(R.layout.activity_album);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ImageButton kind = (ImageButton) findViewById(R.id.imageButton);
+            kind.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    };
+                    new android.support.v7.app.AlertDialog.Builder(Album_Activity.this)
+                            .setTitle("kind 정보")
+                            .setMessage("맥주의 종류는 다음과 같습니다.")
+                            .setMessage("Lager : 국산맥주")
+                            .show();
+                }
+            });
             txtResult = (TextView)findViewById(R.id.txtResult);
             beerName = (TextView) findViewById(R.id.name);
             beerCountry = (TextView) findViewById(R.id.country);

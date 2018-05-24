@@ -24,12 +24,19 @@
             android:text="이미지추출"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textSize="20dp"
-            android:textStyle="bold"></Button>
+            android:textStyle="bold">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"></LinearLayout>
+        </Button>
+
+        <TextView
+            android:layout_width="223dp"
+            android:layout_height="71dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="사진촬영 or 갤러리에서 맥주사진을 불러옵니다"
+            android:textColor="#ffa533"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/db_btn"
@@ -39,12 +46,19 @@
             android:background="#1DDB16"
             android:text="맥주DB"
             android:textSize="20dp"
-            android:textStyle="bold"></Button>
+            android:textStyle="bold">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"></LinearLayout>
+        </Button>
+
+        <TextView
+            android:layout_width="203dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="맥주 database에 모든 맥주를 보여줍니다"
+            android:textColor="#1DDB16"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/exit"

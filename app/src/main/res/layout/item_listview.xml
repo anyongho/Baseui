@@ -16,12 +16,12 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="84dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Name"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <TextView
@@ -42,22 +42,23 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="101dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Country"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/tv_product_country"
-        android:text="Country"
-        android:textColor="#4bb6d6"
-        android:textSize="25dp"/>
+
+        <TextView
+            android:id="@+id/tv_product_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dp"
+            android:text="Country"
+            android:textColor="#4bb6d6"
+            android:textSize="25dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -67,12 +68,12 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="87dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Flavor"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
     <TextView
         android:layout_width="wrap_content"
@@ -91,12 +92,12 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Kind"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
     <TextView
         android:layout_width="wrap_content"
@@ -106,7 +107,7 @@
         android:id="@+id/tv_product_kind"
         android:text="kind"
         android:textColor="#4bb6d6"
-        android:textSize="20dp"/>
+        android:textSize="25dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -115,12 +116,12 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="61dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="IBU"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
     <TextView
         android:layout_width="wrap_content"
@@ -130,7 +131,7 @@
         android:id="@+id/tv_product_IBU"
         android:text="IBU"
         android:textColor="#4bb6d6"
-        android:textSize="20dp"/>
+        android:textSize="25dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -144,17 +145,17 @@
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Alcohol"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_product_Alcohol"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="17dp"
+        android:layout_marginLeft="25dp"
         android:text="alcohol"
         android:textColor="#4bb6d6"
-        android:textSize="20dp"/>
+        android:textSize="25dp"/>
     </LinearLayout>>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -163,21 +164,22 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="67dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:text="Kcal"
-            android:textSize="20dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="45dp"
-        android:id="@+id/tv_product_Kcal"
-        android:text="kcal"
-        android:textColor="#4bb6d6"
-        android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_product_Kcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="45dp"
+            android:text="kcal"
+            android:textColor="#4bb6d6"
+            android:textSize="25dp" />
     </LinearLayout>
 </LinearLayout>

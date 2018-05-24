@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,13 +20,15 @@
 
     <TextView
         android:id="@+id/txtResult"
-        android:layout_width="252dp"
-        android:layout_height="63dp"
+        android:layout_width="342dp"
+        android:layout_height="56dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="3dp"
+        android:text="Source"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -43,12 +46,14 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:textStyle="bold"
+            android:textColor="#6B66FF"
+            android:textSize="20dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -66,19 +71,21 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/country"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:textStyle="bold"
+            android:textColor="#5D5D5D"
+            android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="3dp">
+        android:layout_marginBottom="3dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="70dp"
@@ -90,12 +97,15 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/flavor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/flavor"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:textColor="#5D5D5D"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -105,7 +115,7 @@
         android:layout_marginBottom="3dp">
 
         <TextView
-            android:layout_width="70dp"
+            android:layout_width="67dp"
             android:layout_height="25dp"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
@@ -114,12 +124,22 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/kind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/kind"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:layout_marginLeft="22dp"
+            android:textStyle="bold"
+            android:textColor="#5D5D5D"
+            android:textSize="20dp"/>
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_search" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -138,12 +158,21 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/ibu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ibu"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:textStyle="bold"
+            android:textColor="#5D5D5D"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_search" />
     </LinearLayout>
 
     <LinearLayout
@@ -162,12 +191,21 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/alcohol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/alcohol"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:layout_marginLeft="22dp"
+            android:textStyle="bold"
+            android:textColor="#5D5D5D"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_search" />
     </LinearLayout>
 
 
@@ -187,12 +225,21 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/kcal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/kcal"
             android:layout_gravity="bottom"
             android:layout_marginLeft="20dp"
-            android:textSize="13dp" />
+            android:textStyle="bold"
+            android:textColor="#5D5D5D"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton4"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_search" />
     </LinearLayout>
 
 </LinearLayout>
