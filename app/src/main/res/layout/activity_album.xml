@@ -186,7 +186,7 @@
             android:layout_height="25dp"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
-            android:text="Alcohol"
+            android:text="ABV"
             android:textSize="20dp"
             android:textStyle="bold" />
 

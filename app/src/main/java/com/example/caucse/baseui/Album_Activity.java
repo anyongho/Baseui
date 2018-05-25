@@ -121,6 +121,7 @@ public class Album_Activity extends AppCompatActivity{
             setContentView(R.layout.activity_album);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             ImageButton kind = (ImageButton) findViewById(R.id.imageButton);
+            // kind 정보 버튼을 클릭하면 동작하는 정보창
             kind.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -132,11 +133,76 @@ public class Album_Activity extends AppCompatActivity{
                     };
                     new android.support.v7.app.AlertDialog.Builder(Album_Activity.this)
                             .setTitle("kind 정보")
-                            .setMessage("맥주의 종류는 다음과 같습니다.")
-                            .setMessage("Lager : 국산맥주")
+                            .setMessage("맥주의 종류는 다음과 같다.")
+                            .setMessage("1) Lager : 하면(下面) 발효방식으로 제조한 맥주를 말한다. 알코올 도수가 낮은 편. 향과 깊은 맛이 적은 대신 깔끔하고 시원한 청량감을 가지고 있다\n" +
+                                    "2) Pilsner : Lager의 한 종류.체코 스타일 맥주로 밝고 투명한 노란빛의 맥주이다. 홉의 쌉쌀한 맛이 느껴지나 시원하고 상큼한 향이 특징이다.\n" +
+                                    "3) Dunkel : Lager의 한 종류. 둥켈은 독일어로 Dark를 뜻하며, 독일 스타일 라거 흑맥주이다. 검게 볶은 보리를 사용하며, 고소하고 은은한 맛과 향이 난다. 스타우트보다 쓴맛이 적은 편이다.\n" +
+                                    "4) Witbier : 벨기에식 밀맥주.연하고 가벼운 질감과 무게감을 가졌고 평균 알코올 도수는 4.5~5.5% 라 산뜻하게 즐기기 좋다\n" +
+                                    "5) Stout : 상면발효방식으로 생산되는 영국식 맥주의 한 종류. 맥아 또는 보리를 볶아서 제조하기 때문에 탄 맛이 나는 것이 특징\n" +
+                                    "6) Vodka : 순도 100%가 아닌 10%정도의 vodka를 함량한 맥주\n" +
+                                    "7) Radler : 레모네이드, 소다 등의 소프트 드링크(Soft Drink)와 밝은색 라거 맥주의 혼합주.\n" +
+                                    "8) German Hefeweizen : 독일식 밀맥주. 거품이 매우 부드럽고, 탄산이 비교적 적은 편")
+                            .setNegativeButton("닫기", cancelListener)
                             .show();
                 }
             });
+            // IBU 정보 버튼을 클릭하면 동작하는 정보창
+            ImageButton IBU = (ImageButton) findViewById(R.id.imageButton2);
+            // kind search 버튼을 클릭하면 동작하는 정보창
+            IBU.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    };
+                    new android.support.v7.app.AlertDialog.Builder(Album_Activity.this)
+                            .setTitle("IBU 정보")
+                            .setMessage("IBU : International Bitterness Unit에 약자\n" + "숫자가 클수록 쓴맛이 강한것을 의미한다\n" + "홉의 쓴맛이 강조된 스타일이 아니라면 미표기인 경우가 많다")
+                            .setNegativeButton("닫기", cancelListener)
+                            .show();
+                }
+            });
+
+            ImageButton ABV = (ImageButton) findViewById(R.id.imageButton3);
+            // kind search 버튼을 클릭하면 동작하는 정보창
+                ABV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    };
+                    new android.support.v7.app.AlertDialog.Builder(Album_Activity.this)
+                            .setTitle("ABV 정보")
+                            .setMessage("ABV : Alcohol By volume에 약자" + "보통 %로 표시하며 몇 도다 하는 표현으로 쓰임\n" +"대한민국의 대부분의 라거 맥주들이 4~5%정도. 소주는 19.5%")
+                            .setNegativeButton("닫기", cancelListener)
+                            .show();
+                }
+            });
+            ImageButton kcal = (ImageButton) findViewById(R.id.imageButton4);
+            // kind search 버튼을 클릭하면 동작하는 정보창
+            kcal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    };
+                    new android.support.v7.app.AlertDialog.Builder(Album_Activity.this)
+                            .setTitle("kcal 정보")
+                            .setMessage("맥주 한캔 355ml를 기준으로 kcal 정보를 제공")
+                            .setNegativeButton("닫기", cancelListener)
+                            .show();
+                }
+            });
+
             txtResult = (TextView)findViewById(R.id.txtResult);
             beerName = (TextView) findViewById(R.id.name);
             beerCountry = (TextView) findViewById(R.id.country);
