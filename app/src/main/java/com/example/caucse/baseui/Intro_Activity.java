@@ -13,7 +13,7 @@ public class Intro_Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         h= new Handler(); //딜래이를 주기 위해 핸들러 생성
-        h.postDelayed(mrun, 2000); // 딜레이 ( 런어블 객체는 mrun, 시간 2초)
+        h.postDelayed(mrun, 1500); // 딜레이 ( 런어블 객체는 mrun, 시간 1.5초)
     }
 
     Runnable mrun = new Runnable(){

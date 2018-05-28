@@ -1,24 +1,24 @@
-kgb lemon
+kgb-lemon
 heineken
-paulaner hefe weissbier
+paulaner-hefe-weissbier
 tsingtao
 kronenbourg 1664
 tiger
-san miguel pale pilsen
-pilsner urquell
+san-miguel-pale-pilsen
+pilsner-urquell
 desperados
-krombacher weizen
+krombacher-weizen
 suntory
-kirin ichibang
+kirin-ichibang
 filite
-stella
+stella-artois
 carlsberg
-cass
+cass-fresh
 guinness
 hoegaarden
 asahi
 sapporo
-kozel dark
+kozel-dark
 max
 yebisu
 budweiser

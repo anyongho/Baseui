@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ import java.util.Date;
 
 public class Capture_Activity extends AppCompatActivity {
    ///tensorflow작업에 필요한 변수들
-    String str1[] = new String[10];
+    String str1[] = new String[5];
     private static final int INPUT_SIZE = 299; //이미지 사이즈
     private static final int IMAGE_MEAN = 0;
     private static final float IMAGE_STD = 255.0f;
@@ -196,6 +197,35 @@ public class Capture_Activity extends AppCompatActivity {
                             .show();
                 }
             });
+            //찾던 맥주가 아닙니다 버튼
+            Button check = (Button) findViewById(R.id.check);
+            check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(Capture_Activity.this, "찾으시는 맥주가 없으면 다른 이미지를 추출해주세요", Toast.LENGTH_LONG).show();
+                    DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                        }
+                    };
+                    new android.support.v7.app.AlertDialog.Builder(Capture_Activity.this)
+                            .setTitle("다음 중 찾으시는 맥주가 있나요?")
+                            .setSingleChoiceItems(
+                                    str1, -1, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            database(str1[which]);
+                                        }
+                                    }
+                            )
+                            .setNegativeButton("선택완료", cancelListener)
+                            .show();
+                }
+            });
+
             txtResult = (TextView)findViewById(R.id.txtResult);
             beerName = (TextView) findViewById(R.id.name);
             beerCountry = (TextView) findViewById(R.id.country);
@@ -207,7 +237,7 @@ public class Capture_Activity extends AppCompatActivity {
             // 이미지는 안드로이드용 텐서플로우가 인식할 수 있는 포맷인 비트맵으로 변환해서 텐서플로우에 넘깁니다
             recognize_bitmap(bitmap);
             ((ImageView)findViewById(R.id.img)).setImageBitmap(rotate(bitmap, exifDegree));
-            database();
+            database(str1[0]);
         }else {
         finish();
         }
@@ -250,60 +280,61 @@ public class Capture_Activity extends AppCompatActivity {
             }
         }
     }
-    //database sql 함수
-    private void database(){
+
+    // database sql
+    private void database(String str){
         int ID = 3;
         DBHandler dbHandler = DBHandler.open(this);
         try {
-            if (str1[0].equals("kgb")) {
+            if (str.equals("kgb-lemon")) {
                 ID = 11;
-            } else if (str1[0].equals("heineken")) {
+            } else if (str.equals("heineken")) {
                 ID = 7;
-            } else if (str1[0].equals("paulaner")) {
+            } else if (str.equals("paulaner-hefe-weissbier")) {
                 ID = 24;
-            } else if (str1[0].equals("tsingtao")) {
+            } else if (str.equals("tsingtao")) {
                 ID = 1;
-            } else if (str1[0].equals("kronenbourg")) {
+            } else if (str.equals("kronenbourg")) {
                 ID = 21;
-            } else if (str1[0].equals("tiger")) {
+            } else if (str.equals("tiger")) {
                 ID = 23;
-            } else if (str1[0].equals("san")) {
+            } else if (str.equals("san-miguel-pale-pilsen")) {
                 ID = 16;
-            } else if (str1[0].equals("pilsner")) {
+            } else if (str.equals("pilsner-urquell")) {
                 ID = 25;
-            } else if (str1[0].equals("desperados")) {
+            } else if (str.equals("desperados")) {
                 ID = 13;
-            } else if (str1[0].equals("krombacher")) {
+            } else if (str.equals("krombacher-weizen")) {
                 ID = 22;
-            } else if (str1[0].equals("suntory")) {
+            } else if (str.equals("suntory")) {
                 ID = 17;
-            } else if (str1[0].equals("kirin")) {
+            } else if (str.equals("kirin-ichibang")) {
                 ID = 12;
-            } else if (str1[0].equals("filite")) {
+            } else if (str.equals("filite")) {
                 ID = 9;
-            } else if (str1[0].equals("stella")) {
+            } else if (str.equals("stella-artois")) {
                 ID = 18;
-            } else if (str1[0].equals("carlsberg")) {
+            } else if (str.equals("carlsberg")) {
                 ID = 10;
-            } else if (str1[0].equals("cass")) {
+            } else if (str.equals("cass-fresh")) {
                 ID = 3;
-            } else if (str1[0].equals("guinness")) {
+            } else if (str.equals("guinness")) {
                 ID = 6;
-            } else if (str1[0].equals("hoegaarden")) {
+            } else if (str.equals("hoegaarden")) {
                 ID = 4;
-            } else if (str1[0].equals("asahi")) {
+            } else if (str.equals("asahi")) {
                 ID = 5;
-            } else if (str1[0].equals("sapporo")) {
+            } else if (str.equals("sapporo")) {
                 ID = 8;
-            } else if (str1[0].equals("kozel dark")) {
+            } else if (str.equals("kozel-dark")) {
                 ID = 20;
-            } else if (str1[0].equals("max")) {
+            } else if (str.equals("max")) {
                 ID = 14;
-            } else if (str1[0].equals("yebisu")) {
+            } else if (str.equals("yebisu")) {
                 ID = 19;
-            } else if (str1[0].equals("budweiser")) {
+            } else if (str.equals("budweiser")) {
                 ID = 15;
-            } else if (str1[0].equals("hite")) {
+            } else if (str.equals("hite")) {
                 ID = 2;
             } else{
                 Toast.makeText(this, "정보를 추출해내지 못했습니다.",

@@ -15,19 +15,18 @@
         android:layout_width="290dp"
         android:layout_height="290dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="10dp"
         android:gravity="top" />
 
     <TextView
         android:id="@+id/txtResult"
-        android:layout_width="342dp"
-        android:layout_height="56dp"
-        android:layout_marginLeft="0dp"
+        android:layout_width="334dp"
+        android:layout_height="86dp"
+        android:layout_gravity="center"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="3dp"
         android:text="Source"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp" />
+        android:textSize="18dp" />
 
 
     <LinearLayout
@@ -240,6 +239,22 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_search" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="찾던 맥주가 아닙니다." />
+
     </LinearLayout>
 
 </LinearLayout>
