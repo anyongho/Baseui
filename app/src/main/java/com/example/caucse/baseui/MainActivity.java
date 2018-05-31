@@ -1,13 +1,9 @@
 package com.example.caucse.baseui;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,10 +27,10 @@ public class MainActivity extends Activity {
         //촬영버튼
         capture_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), Capture_Activity.class);
+                 DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getApplicationContext(), Capture_Activity.class);
                         startActivity(intent);
                     }
                 };

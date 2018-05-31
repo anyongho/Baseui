@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="290dp"
-        android:layout_height="290dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:gravity="top" />
@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/txtResult"
         android:layout_width="334dp"
-        android:layout_height="95dp"
+        android:layout_height="87dp"
         android:layout_gravity="center"
         android:layout_marginRight="8dp"
         android:text="Source"
@@ -251,10 +251,28 @@
             android:id="@+id/check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:text="찾던 맥주가 아닙니다." />
+            android:text="찾던 맥주가 아닌가요?" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/another_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="앨범에서 새로운 이미지추출" />
+
+        <Button
+            android:id="@+id/another_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="카메라로 새로운 이미지추출" />
+    </LinearLayout>
 </LinearLayout>

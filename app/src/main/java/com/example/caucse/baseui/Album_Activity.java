@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -230,6 +231,23 @@ public class Album_Activity extends AppCompatActivity{
                             .setMessage("맥주 한캔 355ml를 기준으로 kcal 정보를 제공")
                             .setNegativeButton("닫기", cancelListener)
                             .show();
+                }
+            });
+            Button album = (Button) findViewById(R.id.another_album);
+            album.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                 doTakeAlbumAction();
+                       }
+            });
+
+            Button camera = (Button) findViewById(R.id.another_camera);
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Album_Activity.this, Capture_Activity.class); //인텐트 생성(현 액티비티, 새로 실행할 액티비티)
+                    startActivity(i);
+                    finish();
                 }
             });
 

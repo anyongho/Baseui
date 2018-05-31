@@ -225,6 +225,24 @@ public class Capture_Activity extends AppCompatActivity {
                             .show();
                 }
             });
+            //앨범에서 사진추출
+            Button album = (Button) findViewById(R.id.another_album);
+            album.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Capture_Activity.this, Album_Activity.class); //인텐트 생성(현 액티비티, 새로 실행할 액티비티)
+                    startActivity(i);
+                    finish();
+                }
+            });
+            //카메라에서 사진추출
+            Button camera = (Button) findViewById(R.id.another_camera);
+            camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendTakePhotoIntent();
+                }
+            });
 
             txtResult = (TextView)findViewById(R.id.txtResult);
             beerName = (TextView) findViewById(R.id.name);
