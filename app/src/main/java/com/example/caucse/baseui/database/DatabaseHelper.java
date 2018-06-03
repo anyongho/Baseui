@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DBNAME = "Beerinfor";
+    public static final String DBNAME = "Beerinfor2";
     public static final String DBLOCATION = "/data/data/com.example.caucse.baseui/databases/";
     private Context mContext;
     private SQLiteDatabase mDatabase;
