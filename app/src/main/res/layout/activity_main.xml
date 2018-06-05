@@ -29,13 +29,13 @@
         </Button>
 
         <TextView
-            android:layout_width="223dp"
-            android:layout_height="71dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="사진촬영 or 갤러리에서 맥주사진을 불러옵니다"
             android:textColor="#ffa533"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold" />
 
         <Button
@@ -51,13 +51,13 @@
         </Button>
 
         <TextView
-            android:layout_width="203dp"
-            android:layout_height="72dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="맥주 database에 모든 맥주를 보여줍니다"
             android:textColor="#1DDB16"
-            android:textSize="20dp"
+            android:textSize="17dp"
             android:textStyle="bold" />
 
         <Button
