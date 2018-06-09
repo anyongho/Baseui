@@ -12,8 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="90dp">
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
+
 
         <Button
             android:id="@+id/recapture"
@@ -29,13 +30,13 @@
         </Button>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="218dp"
+            android:layout_height="71dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="사진촬영 or 갤러리에서 맥주사진을 불러옵니다"
             android:textColor="#ffa533"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <Button
@@ -51,13 +52,13 @@
         </Button>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="193dp"
+            android:layout_height="71dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="맥주 database에 모든 맥주를 보여줍니다"
             android:textColor="#1DDB16"
-            android:textSize="17dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <Button
